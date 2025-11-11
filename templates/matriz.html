@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Estoque - SGES</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Matriz de Estoque</h1>
+        <p>Corredor  Prateleira 1     Prateleira 2     Prateleira 3</p>
+        {% for corredor in matriz %}
+            <h2>Corredor {{ corredor.numero }}:</h2>
+            <ul>
+                {% for prateleira in corredor.prateleiras %}
+                    <li>Prateleira {{ prateleira.numero }}: {% if prateleira.produto != 'Vazio' %}{{ prateleira.produto }} (Corredor {{ corredor.numero }}, Quantidade: {{ prateleira.quantidade }}){% else %}Vazio{% endif %}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+</body>
+</html>

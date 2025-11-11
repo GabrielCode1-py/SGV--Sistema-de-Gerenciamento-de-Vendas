@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desempenho dos Produtos - SGES</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Desempenho dos Produtos</h1>
+        {% if desempenhos %}
+            <ul>
+                {% for item in desempenhos %}
+                    <li>Produto: {{ item.nome }} → Desempenho: {{ item.desempenho }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhum produto cadastrado.</p>
+        {% endif %}
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+</body>
+</html>

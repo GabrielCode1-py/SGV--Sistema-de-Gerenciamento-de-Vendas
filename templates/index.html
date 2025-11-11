@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGES - Sistema de Gerenciamento de Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gerenciamento de Estoque Simplificado (SGES)</h1>
+        <!-- Adição: Exibe mensagens flash (ex.: confirmações de ações) -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('cadastrar') }}">Cadastrar Produto</a></li>
+                <li><a href="{{ url_for('listar') }}">Listar Produtos em Estoque</a></li>
+                <li><a href="{{ url_for('desempenho') }}">Verificar nível de Desempenho</a></li>
+                <li><a href="{{ url_for('matriz') }}">Gerar Matriz de Estoque por Corredor</a></li>
+                <li><a href="{{ url_for('tags') }}">Gerar Nuvem de TAGs únicas</a></li>
+                <li><a href="{{ url_for('salvar') }}">Salvar e Voltar ao Menu</a></li>  <!-- Alterado para clareza -->
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
