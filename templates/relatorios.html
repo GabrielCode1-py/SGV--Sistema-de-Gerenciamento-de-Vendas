@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Vendas - SGV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Relatórios de Vendas</h1>
+        <p class="total-geral"><strong>Total Geral de Vendas:</strong> R$ {{ "%.2f"|format(total_geral) }}</p>
+        
+        <h2>Vendas por Cliente</h2>
+        {% if vendas_por_cliente %}
+            {% for cliente_nome, dados in vendas_por_cliente.items() %}
+                <div class="cliente-section">
+                    <h3>{{ cliente_nome }} - Total: R$ {{ "%.2f"|format(dados.total) }}</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venda in dados.vendas %}
+                                <tr>
+                                    <td>{{ venda.Produto_Nome }}</td>
+                                    <td>{{ venda.Tipo_Produto }}</td>
+                                    <td>
+                                        {% if venda.Tipo_Produto == 'esteira' %}
+                                            {{ venda.Quantidade_Input|int }} esteiras ({{ venda.Quantidade_Total|int }} pães)
+                                        {% elif venda.Tipo_Produto == 'quilo' %}
+                                            {{ venda.Quantidade_Total }} kg
+                                        {% else %}
+                                            {{ venda.Quantidade_Total|int }} unidades
+                                        {% endif %}
+                                    </td>
+                                    <td>R$ {{ "%.2f"|format(venda.Valor_Total) }}</td>
+                                    <td>{{ venda.Data }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma venda registrada.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+    <!-- Toggle de Modo Escuro -->
+<div class="theme-toggle">
+    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+</div>
+
+<script>
+    // Verifica tema salvo no localStorage
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateButton();
+
+    function toggleTheme() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateButton();
+    }
+
+    function updateButton() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const btn = document.getElementById('theme-btn');
+        if (theme === 'dark') {
+            btn.innerHTML = '☀️ Modo Claro';
+        } else {
+            btn.innerHTML = '🌙 Modo Escuro';
+        }
+    }
+</script>
+</body>
+</html>

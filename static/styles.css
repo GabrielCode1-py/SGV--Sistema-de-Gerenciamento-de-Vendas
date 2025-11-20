@@ -1,109 +1,425 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* ===========================
+   VARIÁVEIS CSS (Tema Claro/Escuro)
+   =========================== */
+:root {
+    --cor-primaria: #ff6b35;
+    --cor-secundaria: #f7931e;
+    --cor-fundo: #000000;
+    --cor-container: #ffffff;
+    --cor-texto: #333333;
+    --cor-texto-secundario: #666666;
+    --cor-borda: #e0e0e0;
+    --cor-sucesso: #28a745;
+    --cor-erro: #dc3545;
+    --cor-aviso: #ffc107;
+    --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --cor-primaria: #ff8c42;
+    --cor-secundaria: #ffb347;
+    --cor-fundo: #000000;
+    --cor-container: #2d2d2d;
+    --cor-texto: #f0f0f0;
+    --cor-texto-secundario: #b0b0b0;
+    --cor-borda: #444444;
+    --sombra: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ===========================
+   RESET E BASE
+   =========================== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000000;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><text x="50%" y="50%" font-size="80" fill="rgba(255,107,53,0.1)" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-weight="bold">SGV - Sistema de Vendas</text></svg>');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--cor-texto);
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+/* ===========================
+   CONTAINER PRINCIPAL
+   =========================== */
 .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
+[data-theme="dark"] .container {
+    background: rgba(45, 45, 45, 0.98);
+    box-shadow: 0 8px 32px rgba(255, 140, 66, 0.3);
+}
+
+/* ===========================
+   CABEÇALHO
+   =========================== */
 h1 {
     text-align: center;
-    color: #333;
+    color: var(--cor-primaria);
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 900;
 }
 
+h2 {
+    color: var(--cor-secundaria);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 3px solid var(--cor-primaria);
+    padding-bottom: 8px;
+}
+
+h3 {
+    color: var(--cor-texto-secundario);
+    margin-top: 20px;
+}
+
+/* ===========================
+   TOGGLE MODO ESCURO
+   =========================== */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.theme-toggle button {
+    background: var(--cor-primaria);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(255, 107, 53, 0.6);
+}
+
+/* ===========================
+   NAVEGAÇÃO
+   =========================== */
 nav ul {
     list-style-type: none;
     padding: 0;
-}
-
-nav ul li {
-    margin: 10px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
 }
 
 nav ul li a {
     display: block;
-    padding: 10px;
-    background-color: #007bff;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
     color: white;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 8px;
     text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 nav ul li a:hover {
-    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(255, 107, 53, 0.4);
 }
 
+nav ul li a:active {
+    transform: translateY(0);
+}
+
+/* ===========================
+   FORMULÁRIOS
+   =========================== */
 form {
     display: flex;
     flex-direction: column;
+    gap: 15px;
 }
 
 label {
-    margin-top: 10px;
+    font-weight: bold;
+    color: var(--cor-texto);
 }
 
-input {
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+input, select, textarea {
+    padding: 12px;
+    border: 2px solid var(--cor-borda);
+    border-radius: 6px;
+    background-color: var(--cor-container);
+    color: var(--cor-texto);
+    transition: all 0.3s ease;
 }
 
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+/* ===========================
+   BOTÕES
+   =========================== */
 button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #28a745;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 107, 53, 0.4);
 }
 
+button:active {
+    transform: translateY(0);
+}
+
+.btn-finalizar {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.btn-finalizar:hover {
+    background: linear-gradient(135deg, #0056b3, #003d82);
+}
+
+.btn-remover {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.btn-remover:hover {
+    background: linear-gradient(135deg, #c82333, #a71d2a);
+}
+
+/* ===========================
+   TABELAS
+   =========================== */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 table th, table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid var(--cor-borda);
+    padding: 12px;
     text-align: left;
 }
 
 table th {
-    background-color: #f2f2f2;
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+    color: white;
+    font-weight: bold;
 }
 
-ul {
+table tr:nth-child(even) {
+    background-color: rgba(255, 107, 53, 0.05);
+}
+
+table tr:hover {
+    background-color: rgba(255, 107, 53, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.total-row {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    font-weight: bold;
+}
+
+.total-geral {
+    font-size: 24px;
+    color: var(--cor-primaria);
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* ===========================
+   MENSAGENS FLASH
+   =========================== */
+.flashes {
     list-style-type: none;
     padding: 0;
+    margin: 20px 0;
 }
 
-ul li {
-    padding: 5px 0;
+.flashes li {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    animation: slideIn 0.3s ease;
+    border-left: 5px solid;
 }
 
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.flashes li {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #28a745;
+}
+
+.flashes li.erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #dc3545;
+}
+
+/* ===========================
+   SEÇÕES DE CLIENTES
+   =========================== */
+.cliente-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(247, 147, 30, 0.05));
+    border-radius: 8px;
+    border-left: 5px solid var(--cor-primaria);
+}
+
+/* ===========================
+   LINKS
+   =========================== */
 a {
     display: inline-block;
     margin-top: 20px;
-    color: #007bff;
+    color: var(--cor-primaria);
     text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 a:hover {
-    text-decoration: underline;
+    color: var(--cor-secundaria);
+    transform: translateX(5px);
+}
+
+/* ===========================
+   RESPONSIVIDADE
+   =========================== */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    nav ul {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+/* ===========================
+   ANIMAÇÕES E EFEITOS
+   =========================== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.container {
+    animation: fadeIn 0.5s ease;
+}
+
+/* ===========================
+   LOADING SPINNER (Opcional)
+   =========================== */
+.spinner {
+    border: 4px solid rgba(255, 107, 53, 0.1);
+    border-top: 4px solid var(--cor-primaria);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===========================
+   CLASSES UTILITÁRIAS
+   =========================== */
+.sucesso {
+    color: var(--cor-sucesso);
+}
+
+.erro {
+    color: var(--cor-erro);
+}
+
+.aviso {
+    color: var(--cor-aviso);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }

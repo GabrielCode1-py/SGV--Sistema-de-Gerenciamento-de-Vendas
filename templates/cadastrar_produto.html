@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Produto - SGV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Produto</h1>
+        <form method="POST">
+            <label for="nome">Nome do produto:</label>
+            <input type="text" id="nome" name="nome" required>
+            
+            <label for="tipo">Tipo de venda:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="unitario">Unitário</option>
+                <option value="quilo">Por Quilo (kg)</option>
+                <option value="esteira">Esteira (30 unidades - pães)</option>
+            </select>
+            
+            <label for="valor">Valor (R$):</label>
+            <input type="number" step="0.01" id="valor" name="valor" required placeholder="Ex: 0.35 ou 12.50">
+            
+            <label for="controlar_estoque">Controlar estoque?</label>
+            <select id="controlar_estoque" name="controlar_estoque" onchange="toggleQuantidade()" required>
+                <option value="nao">Não (fabricado na hora)</option>
+                <option value="sim">Sim (controlar quantidade)</option>
+            </select>
+            
+            <div id="campo_quantidade" style="display:none;">
+                <label for="quantidade">Quantidade em estoque:</label>
+                <input type="number" step="0.01" id="quantidade" name="quantidade" placeholder="Deixe vazio se fabricado na hora">
+            </div>
+            
+            <button type="submit">Cadastrar Produto</button>
+        </form>
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        // Toggle estoque
+        function toggleQuantidade() {
+            const select = document.getElementById('controlar_estoque');
+            const campo = document.getElementById('campo_quantidade');
+            const input = document.getElementById('quantidade');
+            
+            if (select.value === 'sim') {
+                campo.style.display = 'block';
+                input.required = true;
+            } else {
+                campo.style.display = 'none';
+                input.required = false;
+                input.value = '';
+            }
+        }
+
+        // Tema escuro
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            if (theme === 'dark') {
+                btn.innerHTML = '☀️ Modo Claro';
+            } else {
+                btn.innerHTML = '🌙 Modo Escuro';
+            }
+        }
+    </script>
+</body>
+</html>

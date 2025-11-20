@@ -3,37 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Produtos - SGV</title>
+    <title>Listar Clientes - SGV</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Produtos em Estoque</h1>
-        {% if produtos %}
+        <h1>Clientes Cadastrados</h1>
+        {% if clientes %}
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Valor (R$)</th>
-                        <th>Quantidade</th>
+                        <th>Telefone</th>
+                        <th>Observações</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for produto in produtos %}
+                    {% for cliente in clientes %}
                         <tr>
-                            <td>{{ produto.id }}</td>
-                            <td>{{ produto.nome }}</td>
-                            <td>{{ produto.tipo }}</td>
-                            <td>R$ {{ "%.2f"|format(produto.valor) }}</td>
-                            <td>{{ produto.quantidade }}</td>
+                            <td>{{ cliente.id }}</td>
+                            <td><a href="{{ url_for('cliente_detalhes', cliente_id=cliente.id) }}">{{ cliente.nome }}</a></td>
+                            <td>{{ cliente.telefone }}</td>
+                            <td>{{ cliente.observacoes }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remover_cliente_route', cliente_id=cliente.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Tem certeza que deseja remover este cliente?')">Remover</button>
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <p>Nenhum produto cadastrado.</p>
+            <p>Nenhum cliente cadastrado.</p>
         {% endif %}
         <a href="{{ url_for('index') }}">Voltar ao Menu</a>
     </div>

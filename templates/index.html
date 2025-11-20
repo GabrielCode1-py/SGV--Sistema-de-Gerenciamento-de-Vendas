@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGES - Sistema de Gerenciamento de Estoque</title>
+    <title>SGV - Sistema de Gerenciamento de Vendas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Sistema de Gerenciamento de Estoque Simplificado (SGES)</h1>
-        <!-- Adição: Exibe mensagens flash (ex.: confirmações de ações) -->
+        <h1>Sistema de Gerenciamento de Vendas (SGV)</h1>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul class="flashes">
@@ -21,14 +20,74 @@
         {% endwith %}
         <nav>
             <ul>
-                <li><a href="{{ url_for('cadastrar') }}">Cadastrar Produto</a></li>
-                <li><a href="{{ url_for('listar') }}">Listar Produtos em Estoque</a></li>
-                <li><a href="{{ url_for('desempenho') }}">Verificar nível de Desempenho</a></li>
-                <li><a href="{{ url_for('matriz') }}">Gerar Matriz de Estoque por Corredor</a></li>
-                <li><a href="{{ url_for('tags') }}">Gerar Nuvem de TAGs únicas</a></li>
-                <li><a href="{{ url_for('salvar') }}">Salvar e Voltar ao Menu</a></li>  <!-- Alterado para clareza -->
+                <li><a href="{{ url_for('cadastrar_produto_route') }}">Cadastrar Produto</a></li>
+                <li><a href="{{ url_for('listar_produtos_route') }}">Listar Produtos</a></li>
+                <li><a href="{{ url_for('cadastrar_cliente_route') }}">Cadastrar Cliente</a></li>
+                <li><a href="{{ url_for('listar_clientes_route') }}">Listar Clientes</a></li>
+                <li><a href="{{ url_for('relatorios') }}">Relatórios de Vendas</a></li>
+                <li><a href="{{ url_for('fechamento_mensal_route') }}">Fechamento Mensal</a></li>
+                <li><a href="{{ url_for('salvar') }}">Salvar Dados</a></li>
             </ul>
         </nav>
     </div>
-</body>
+
+    <!-- ===== TOGGLE DE MODO ESCURO (ADICIONAR AQUI) ===== -->
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        // Verifica tema salvo no localStorage
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            if (theme === 'dark') {
+                btn.innerHTML = '☀️ Modo Claro';
+            } else {
+                btn.innerHTML = '🌙 Modo Escuro';
+            }
+        }
+    </script>
+    <!-- Toggle de Modo Escuro -->
+<div class="theme-toggle">
+    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+</div>
+
+<script>
+    // Verifica tema salvo no localStorage
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateButton();
+
+    function toggleTheme() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateButton();
+    }
+
+    function updateButton() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const btn = document.getElementById('theme-btn');
+        if (theme === 'dark') {
+            btn.innerHTML = '☀️ Modo Claro';
+        } else {
+            btn.innerHTML = '🌙 Modo Escuro';
+        }
+    }
+</script>
+</body> <!-- ← O script JavaScript fica ANTES deste </body> -->
 </html>

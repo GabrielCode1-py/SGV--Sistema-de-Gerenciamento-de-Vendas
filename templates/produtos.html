@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Produtos - SGV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Produtos Cadastrados</h1>
+        {% if produtos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Valor (R$)</th>
+                        <th>Estoque</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                        <tr>
+                            <td>{{ produto.id }}</td>
+                            <td>{{ produto.nome }}</td>
+                            <td>{{ produto.tipo }}</td>
+                            <td>R$ {{ "%.2f"|format(produto.valor) }}</td>
+                            <td>
+                                {% if produto.controlar_estoque %}
+                                    {{ produto.quantidade }}
+                                {% else %}
+                                    <span style="color:#28a745;">Ilimitado</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remover_produto_route', produto_id=produto.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Tem certeza?')">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum produto cadastrado.</p>
+        {% endif %}
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
+</body>
+</html>
