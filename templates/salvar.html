@@ -8,15 +8,39 @@
 </head>
 <body>
     <div class="container">
-        <h1>Dados Salvos com Sucesso</h1>
+        <h1>Dados Salvos com Sucesso!</h1>
         <p>Os dados foram salvos nos arquivos:</p>
         <ul>
-            <li>estoque.xlsx (produtos)</li>
-            <li>vendas.xlsx (clientes e vendas)</li>
-            <li>vendas_log.txt (histórico de ações)</li>
+            <li>✅ estoque.xlsx (produtos)</li>
+            <li>✅ vendas.xlsx (clientes, vendas, fechamentos)</li>
+            <li>✅ gastos.xlsx (despesas fixas e variáveis)</li>
+            <li>✅ vendas_log.txt (histórico)</li>
         </ul>
         <a href="{{ url_for('index') }}">Voltar ao Menu</a>
     </div>
-</body>
 
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
+</body>
 </html>

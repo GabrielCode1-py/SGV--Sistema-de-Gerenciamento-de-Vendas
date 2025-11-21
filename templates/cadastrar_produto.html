@@ -31,7 +31,7 @@
             
             <div id="campo_quantidade" style="display:none;">
                 <label for="quantidade">Quantidade em estoque:</label>
-                <input type="number" step="0.01" id="quantidade" name="quantidade" placeholder="Deixe vazio se fabricado na hora">
+                <input type="number" step="0.01" id="quantidade" name="quantidade" placeholder="Ex: 100">
             </div>
             
             <button type="submit">Cadastrar Produto</button>
@@ -44,7 +44,6 @@
     </div>
 
     <script>
-        // Toggle estoque
         function toggleQuantidade() {
             const select = document.getElementById('controlar_estoque');
             const campo = document.getElementById('campo_quantidade');
@@ -60,7 +59,6 @@
             }
         }
 
-        // Tema escuro
         const currentTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
@@ -76,11 +74,7 @@
         function updateButton() {
             const theme = document.documentElement.getAttribute('data-theme');
             const btn = document.getElementById('theme-btn');
-            if (theme === 'dark') {
-                btn.innerHTML = '☀️ Modo Claro';
-            } else {
-                btn.innerHTML = '🌙 Modo Escuro';
-            }
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
         }
     </script>
 </body>

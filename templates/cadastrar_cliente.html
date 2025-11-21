@@ -8,49 +8,59 @@
 </head>
 <body>
     <div class="container">
-        <h1>Cadastro de Cliente</h1>
+        <h1>👤 Cadastro de Cliente</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li class="{% if 'Erro' in message %}erro{% endif %}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        
         <form method="POST">
-            <label for="nome">Nome do cliente:</label>
-            <input type="text" id="nome" name="nome" required>
+            <label for="nome">Nome do cliente: *</label>
+            <input type="text" id="nome" name="nome" required 
+                   placeholder="Digite o nome completo">
             
             <label for="telefone">Telefone:</label>
-            <input type="text" id="telefone" name="telefone" placeholder="(opcional)">
+            <input type="text" id="telefone" name="telefone" 
+                   placeholder="(11) 99999-9999 (opcional)">
             
             <label for="observacoes">Observações:</label>
-            <textarea id="observacoes" name="observacoes" rows="3" placeholder="(opcional)"></textarea>
+            <textarea id="observacoes" name="observacoes" rows="3" 
+                      placeholder="Informações adicionais (opcional)"></textarea>
             
             <button type="submit">Cadastrar Cliente</button>
         </form>
+        
         <a href="{{ url_for('index') }}">Voltar ao Menu</a>
     </div>
-    <!-- Toggle de Modo Escuro -->
-<div class="theme-toggle">
-    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
-</div>
 
-<script>
-    // Verifica tema salvo no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateButton();
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
 
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
-    }
 
-    function updateButton() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const btn = document.getElementById('theme-btn');
-        if (theme === 'dark') {
-            btn.innerHTML = '☀️ Modo Claro';
-        } else {
-            btn.innerHTML = '🌙 Modo Escuro';
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
         }
-    }
-</script>
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
 </body>
 </html>

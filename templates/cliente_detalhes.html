@@ -14,11 +14,12 @@
         
         <h2>Adicionar Itens ao Pedido</h2>
         <form method="POST" action="{{ url_for('adicionar_carrinho') }}">
-            <label for="produto_id">Selecionar Produto:</label>
+            <label for="produto_id">Produto:</label>
             <select id="produto_id" name="produto_id" required>
                 {% for produto in produtos %}
                     <option value="{{ produto.id }}">
-                        {{ produto.nome }} ({{ produto.tipo }}) - R$ {{ "%.2f"|format(produto.valor) }} - Estoque: {{ produto.quantidade }}
+                        {{ produto.nome }} ({{ produto.tipo }}) - R$ {{ "%.2f"|format(produto.valor) }}
+                        {% if produto.controlar_estoque %} - Estoque: {{ produto.quantidade }}{% else %} - Ilimitado{% endif %}
                     </option>
                 {% endfor %}
             </select>
@@ -30,14 +31,14 @@
             <button type="submit">Adicionar ao Pedido</button>
         </form>
         
-        <h2>Itens do Pedido Atual</h2>
+        <h2>Carrinho Atual</h2>
         {% if carrinho %}
             <table>
                 <thead>
                     <tr>
                         <th>Produto</th>
                         <th>Descrição</th>
-                        <th>Valor</th>
+                        <th>Valor (R$)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,25 +55,35 @@
                     </tr>
                 </tbody>
             </table>
+            
             <form method="POST" action="{{ url_for('finalizar_pedido_route') }}">
+                <label for="forma_pagamento">Forma de Pagamento:</label>
+                <select id="forma_pagamento" name="forma_pagamento" required>
+                    <option value="pix">PIX</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="deposito">Depósito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="pendente">Pendente (pagar depois)</option>
+                </select>
                 <button type="submit" class="btn-finalizar">Finalizar Pedido</button>
             </form>
+            
             <form method="POST" action="{{ url_for('limpar_carrinho') }}">
                 <button type="submit" class="btn-remover">Limpar Carrinho</button>
             </form>
         {% else %}
-            <p>Nenhum item no carrinho.</p>
+            <p>Carrinho vazio.</p>
         {% endif %}
         
-        <h2>Histórico de Vendas do Cliente</h2>
+        <h2>Histórico de Vendas</h2>
         {% if vendas_cliente %}
             <table>
                 <thead>
                     <tr>
                         <th>Produto</th>
-                        <th>Tipo</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
+                        <th>Pagamento</th>
                         <th>Data</th>
                     </tr>
                 </thead>
@@ -80,56 +91,51 @@
                     {% for venda in vendas_cliente %}
                         <tr>
                             <td>{{ venda.Produto_Nome }}</td>
-                            <td>{{ venda.Tipo_Produto }}</td>
                             <td>
                                 {% if venda.Tipo_Produto == 'esteira' %}
                                     {{ venda.Quantidade_Input|int }} esteiras ({{ venda.Quantidade_Total|int }} pães)
                                 {% elif venda.Tipo_Produto == 'quilo' %}
                                     {{ venda.Quantidade_Total }} kg
                                 {% else %}
-                                    {{ venda.Quantidade_Total|int }} unidades
+                                    {{ venda.Quantidade_Total|int }} un
                                 {% endif %}
                             </td>
                             <td>R$ {{ "%.2f"|format(venda.Valor_Total) }}</td>
+                            <td>{{ venda.Forma_Pagamento }}</td>
                             <td>{{ venda.Data }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <p>Nenhuma venda registrada para este cliente.</p>
+            <p>Nenhuma venda registrada.</p>
         {% endif %}
         
-        <a href="{{ url_for('listar_clientes_route') }}">Voltar à Lista de Clientes</a>
+        <a href="{{ url_for('listar_clientes_route') }}">Voltar</a>
     </div>
-    <!-- Toggle de Modo Escuro -->
-<div class="theme-toggle">
-    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
-</div>
 
-<script>
-    // Verifica tema salvo no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateButton();
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
 
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
-    }
 
-    function updateButton() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const btn = document.getElementById('theme-btn');
-        if (theme === 'dark') {
-            btn.innerHTML = '☀️ Modo Claro';
-        } else {
-            btn.innerHTML = '🌙 Modo Escuro';
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
         }
-    }
-</script>
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
 </body>
 </html>

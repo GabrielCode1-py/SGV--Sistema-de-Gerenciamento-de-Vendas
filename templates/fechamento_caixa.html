@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fechamento de Caixa - SGV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>💰 Fechamento de Caixa</h1>
+        
+        <div class="resumo-dia">
+            <h3>Resumo do Dia ({{ data_hoje }})</h3>
+            <p><strong>Total de Vendas:</strong> R$ {{ "%.2f"|format(total_dia) }}</p>
+            <p><strong>Total Pago:</strong> R$ {{ "%.2f"|format(total_pago_dia) }}</p>
+            <p><strong>Total Pendente:</strong> R$ {{ "%.2f"|format(total_pendente_dia) }}</p>
+        </div>
+        
+        <h2>Registrar Fechamento</h2>
+        <form method="POST">
+            <label for="data_fechamento">Data:</label>
+            <input type="date" id="data_fechamento" name="data_fechamento" 
+                   value="{{ data_hoje }}" required>
+            
+            <h3>Valores Recebidos</h3>
+            <label for="pix">PIX (R$):</label>
+            <input type="number" step="0.01" id="pix" name="pix" value="0" min="0" required>
+            
+            <label for="cartao">Cartão (R$):</label>
+            <input type="number" step="0.01" id="cartao" name="cartao" value="0" min="0" required>
+            
+            <label for="deposito">Depósito (R$):</label>
+            <input type="number" step="0.01" id="deposito" name="deposito" value="0" min="0" required>
+            
+            <label for="dinheiro">Dinheiro (R$):</label>
+            <input type="number" step="0.01" id="dinheiro" name="dinheiro" value="0" min="0" required>
+            
+            <button type="submit">Processar Fechamento</button>
+        </form>
+        
+        <h2>Histórico de Fechamentos</h2>
+        {% if fechamentos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Total Vendas</th>
+                        <th>Total Pago</th>
+                        <th>Pendente</th>
+                        <th>PIX</th>
+                        <th>Cartão</th>
+                        <th>Depósito</th>
+                        <th>Dinheiro</th>
+                        <th>Total Recebido</th>
+                        <th>Diferença</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in fechamentos %}
+                        <tr>
+                            <td>{{ f.Data }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Total_Vendas) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Total_Pago) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Total_Pendente) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.PIX) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Cartao) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Deposito) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Dinheiro) }}</td>
+                            <td>R$ {{ "%.2f"|format(f.Total_Recebido) }}</td>
+                            <td style="font-weight:bold; color:{% if f.Diferenca < 0 %}#dc3545{% elif f.Diferenca > 0 %}#28a745{% else %}#333{% endif %}">
+                                R$ {{ "%.2f"|format(f.Diferenca) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum fechamento registrado.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
+</body>
+</html>

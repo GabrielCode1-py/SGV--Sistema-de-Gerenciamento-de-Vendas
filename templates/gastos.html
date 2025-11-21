@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Gastos - SGV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestão de Gastos</h1>
+        
+        <h2>Cadastrar Gasto</h2>
+        <form method="POST">
+            <label for="tipo_gasto">Tipo de Gasto:</label>
+            <select id="tipo_gasto" name="tipo_gasto" onchange="toggleCamposGasto()" required>
+                <option value="fixo">Fixo (Parcela, Luz, Água, etc)</option>
+                <option value="variavel">Variável (Matéria-prima)</option>
+            </select>
+            
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" required placeholder="Ex: Parcela terreno">
+            
+            <label for="valor">Valor (R$):</label>
+            <input type="number" step="0.01" id="valor" name="valor" required>
+            
+            <div id="campo_data_vencimento" style="display:block;">
+                <label for="data_vencimento">Data de Vencimento:</label>
+                <input type="date" id="data_vencimento" name="data_vencimento">
+            </div>
+            
+            <div id="campo_quantidade" style="display:none;">
+                <label for="quantidade">Quantidade (kg/unidades):</label>
+                <input type="number" step="0.01" id="quantidade" name="quantidade" placeholder="Ex: 50">
+            </div>
+            
+            <button type="submit">Cadastrar Gasto</button>
+        </form>
+        
+        <h2>Gastos Fixos - Total: R$ {{ "%.2f"|format(total_fixos) }}</h2>
+        {% if gastos.fixos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Valor (R$)</th>
+                        <th>Vencimento</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gasto in gastos.fixos %}
+                        <tr>
+                            <td>{{ gasto.ID }}</td>
+                            <td>{{ gasto.Descricao }}</td>
+                            <td>R$ {{ "%.2f"|format(gasto.Valor) }}</td>
+                            <td>{{ gasto.Data_Vencimento }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remover_gasto_route', tipo_gasto='fixo', gasto_id=gasto.ID) }}" style="display:inline;">
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Remover?')">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum gasto fixo cadastrado.</p>
+        {% endif %}
+        
+        <h2>Gastos Variáveis - Total: R$ {{ "%.2f"|format(total_variaveis) }}</h2>
+        {% if gastos.variaveis %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Valor Un. (R$)</th>
+                        <th>Quantidade</th>
+                        <th>Total (R$)</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gasto in gastos.variaveis %}
+                        <tr>
+                            <td>{{ gasto.ID }}</td>
+                            <td>{{ gasto.Descricao }}</td>
+                            <td>R$ {{ "%.2f"|format(gasto.Valor) }}</td>
+                            <td>{{ gasto.Quantidade }}</td>
+                            <td>R$ {{ "%.2f"|format(gasto.Valor * gasto.Quantidade) }}</td>
+                            <td>{{ gasto.Data }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remover_gasto_route', tipo_gasto='variavel', gasto_id=gasto.ID) }}" style="display:inline;">
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Remover?')">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum gasto variável cadastrado.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}">Voltar ao Menu</a>
+    </div>
+
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
+
+    <script>
+        function toggleCamposGasto() {
+            const select = document.getElementById('tipo_gasto');
+            const campoData = document.getElementById('campo_data_vencimento');
+            const campoQuantidade = document.getElementById('campo_quantidade');
+            const inputData = document.getElementById('data_vencimento');
+            const inputQuantidade = document.getElementById('quantidade');
+            
+            if (select.value === 'fixo') {
+                campoData.style.display = 'block';
+                inputData.required = true;
+                campoQuantidade.style.display = 'none';
+                inputQuantidade.required = false;
+            } else {
+                campoData.style.display = 'none';
+                inputData.required = false;
+                campoQuantidade.style.display = 'block';
+                inputQuantidade.required = true;
+            }
+        }
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateButton();
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
+        }
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
+</body>
+</html>

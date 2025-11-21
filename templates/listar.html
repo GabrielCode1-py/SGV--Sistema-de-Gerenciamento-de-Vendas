@@ -17,7 +17,7 @@
                         <th>Nome</th>
                         <th>Tipo</th>
                         <th>Valor (R$)</th>
-                        <th>Quantidade</th>
+                        <th>Estoque</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +27,13 @@
                             <td>{{ produto.nome }}</td>
                             <td>{{ produto.tipo }}</td>
                             <td>R$ {{ "%.2f"|format(produto.valor) }}</td>
-                            <td>{{ produto.quantidade }}</td>
+                            <td>
+                                {% if produto.controlar_estoque %}
+                                    {{ produto.quantidade }}
+                                {% else %}
+                                    <span class="badge-ilimitado">Ilimitado</span>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -37,34 +43,29 @@
         {% endif %}
         <a href="{{ url_for('index') }}">Voltar ao Menu</a>
     </div>
-    <!-- Toggle de Modo Escuro -->
-<div class="theme-toggle">
-    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
-</div>
 
-<script>
-    // Verifica tema salvo no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateButton();
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
 
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
-    }
 
-    function updateButton() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const btn = document.getElementById('theme-btn');
-        if (theme === 'dark') {
-            btn.innerHTML = '☀️ Modo Claro';
-        } else {
-            btn.innerHTML = '🌙 Modo Escuro';
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
         }
-    }
-</script>
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Produtos - SGV</title>
+    <title>Produtos - SGV</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -32,12 +32,12 @@
                                 {% if produto.controlar_estoque %}
                                     {{ produto.quantidade }}
                                 {% else %}
-                                    <span style="color:#28a745;">Ilimitado</span>
+                                    <span class="badge-ilimitado">Ilimitado</span>
                                 {% endif %}
                             </td>
                             <td>
                                 <form method="POST" action="{{ url_for('remover_produto_route', produto_id=produto.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn-remover" onclick="return confirm('Tem certeza?')">Remover</button>
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Remover produto?')">Remover</button>
                                 </form>
                             </td>
                         </tr>

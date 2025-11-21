@@ -20,24 +20,24 @@
         {% endwith %}
         <nav>
             <ul>
-                <li><a href="{{ url_for('cadastrar_produto_route') }}">Cadastrar Produto</a></li>
-                <li><a href="{{ url_for('listar_produtos_route') }}">Listar Produtos</a></li>
-                <li><a href="{{ url_for('cadastrar_cliente_route') }}">Cadastrar Cliente</a></li>
-                <li><a href="{{ url_for('listar_clientes_route') }}">Listar Clientes</a></li>
-                <li><a href="{{ url_for('relatorios') }}">Relatórios de Vendas</a></li>
-                <li><a href="{{ url_for('fechamento_mensal_route') }}">Fechamento Mensal</a></li>
-                <li><a href="{{ url_for('salvar') }}">Salvar Dados</a></li>
+                <li><a href="{{ url_for('cadastrar_produto_route') }}">📦 Cadastrar Produto</a></li>
+                <li><a href="{{ url_for('listar_produtos_route') }}">📋 Listar Produtos</a></li>
+                <li><a href="{{ url_for('cadastrar_cliente_route') }}">👤 Cadastrar Cliente</a></li>
+                <li><a href="{{ url_for('listar_clientes_route') }}">👥 Listar Clientes</a></li>
+                <li><a href="{{ url_for('relatorios') }}">📊 Relatórios de Vendas</a></li>
+                <li><a href="{{ url_for('fechamento_caixa_route') }}">💰 Fechamento de Caixa</a></li>
+                <li><a href="{{ url_for('gastos_route') }}">💸 Gestão de Gastos</a></li>
+                <li><a href="{{ url_for('fechamento_mensal_route') }}">📅 Fechamento Mensal</a></li>
+                <li><a href="{{ url_for('salvar') }}">💾 Salvar Dados</a></li>
             </ul>
         </nav>
     </div>
 
-    <!-- ===== TOGGLE DE MODO ESCURO (ADICIONAR AQUI) ===== -->
     <div class="theme-toggle">
         <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
     </div>
 
     <script>
-        // Verifica tema salvo no localStorage
         const currentTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
@@ -53,41 +53,8 @@
         function updateButton() {
             const theme = document.documentElement.getAttribute('data-theme');
             const btn = document.getElementById('theme-btn');
-            if (theme === 'dark') {
-                btn.innerHTML = '☀️ Modo Claro';
-            } else {
-                btn.innerHTML = '🌙 Modo Escuro';
-            }
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
         }
     </script>
-    <!-- Toggle de Modo Escuro -->
-<div class="theme-toggle">
-    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
-</div>
-
-<script>
-    // Verifica tema salvo no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateButton();
-
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateButton();
-    }
-
-    function updateButton() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const btn = document.getElementById('theme-btn');
-        if (theme === 'dark') {
-            btn.innerHTML = '☀️ Modo Claro';
-        } else {
-            btn.innerHTML = '🌙 Modo Escuro';
-        }
-    }
-</script>
-</body> <!-- ← O script JavaScript fica ANTES deste </body> -->
+</body>
 </html>

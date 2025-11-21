@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Clientes - SGV</title>
+    <title>Clientes - SGV</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Clientes Cadastrados</h1>
+        <h1>👥 Clientes Cadastrados</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li class="{% if 'Erro' in message %}erro{% endif %}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        
         {% if clientes %}
             <table>
                 <thead>
@@ -24,12 +35,18 @@
                     {% for cliente in clientes %}
                         <tr>
                             <td>{{ cliente.id }}</td>
-                            <td><a href="{{ url_for('cliente_detalhes', cliente_id=cliente.id) }}">{{ cliente.nome }}</a></td>
+                            <td>
+                                <a href="{{ url_for('cliente_detalhes', cliente_id=cliente.id) }}">
+                                    {{ cliente.nome }}
+                                </a>
+                            </td>
                             <td>{{ cliente.telefone }}</td>
                             <td>{{ cliente.observacoes }}</td>
                             <td>
                                 <form method="POST" action="{{ url_for('remover_cliente_route', cliente_id=cliente.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn-remover" onclick="return confirm('Tem certeza que deseja remover este cliente?')">Remover</button>
+                                    <button type="submit" class="btn-remover" onclick="return confirm('Tem certeza que deseja remover este cliente?')">
+                                        Remover
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -37,38 +54,34 @@
                 </tbody>
             </table>
         {% else %}
-            <p>Nenhum cliente cadastrado.</p>
+            <p>Nenhum cliente cadastrado. <a href="{{ url_for('cadastrar_cliente_route') }}">Cadastrar primeiro cliente</a></p>
         {% endif %}
+        
         <a href="{{ url_for('index') }}">Voltar ao Menu</a>
     </div>
-    <!-- Toggle de Modo Escuro -->
-<div class="theme-toggle">
-    <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
-</div>
 
-<script>
-    // Verifica tema salvo no localStorage
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateButton();
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Modo Escuro</button>
+    </div>
 
-    function toggleTheme() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
         updateButton();
-    }
 
-    function updateButton() {
-        const theme = document.documentElement.getAttribute('data-theme');
-        const btn = document.getElementById('theme-btn');
-        if (theme === 'dark') {
-            btn.innerHTML = '☀️ Modo Claro';
-        } else {
-            btn.innerHTML = '🌙 Modo Escuro';
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton();
         }
-    }
-</script>
+
+        function updateButton() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const btn = document.getElementById('theme-btn');
+            btn.innerHTML = theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+        }
+    </script>
 </body>
 </html>
